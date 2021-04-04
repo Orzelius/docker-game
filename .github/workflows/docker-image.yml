@@ -14,5 +14,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag kaspar-game:$(date +%s)
+    - name: Docker login
+      run: echo $GITHUB_TOKEN | docker login https://docker.pkg.github.com -u Orzelius --password-stdin
+    - name: Tag docker image
+      run: docker tag 09e243ec5029 docker.pkg.github.com/orzelius/docker-game/kaspar-game:$GITHUB_SHA
+    - name: Build Image
+      run: docker build .
+    - name: push image
+      run: docker push docker.pkg.github.com/orzelius/docker-game/kaspar-game:$GITHUB_SHA
